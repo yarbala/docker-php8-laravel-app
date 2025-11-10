@@ -8,4 +8,4 @@ set -e
 docker buildx build --platform linux/amd64,linux/arm64 -t yarbala/php8-fpm-laravel-nginx:8.2 --push -f nginx.Dockerfile .
 docker buildx build --platform linux/amd64,linux/arm64 -t yarbala/php8-laravel-cli:8.2 --push -f cli.Dockerfile .
 
-#docker buildx stop buildx_instance
+docker buildx stop buildx_instance

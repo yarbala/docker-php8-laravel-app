@@ -29,7 +29,6 @@ services:
     build:
       context: ./build/php-cli
       args:
-        - INSTALL_COMPOSER=true
         - PUID=${PUID}
     environment:
       - TZ=${TZ}

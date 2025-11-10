@@ -1,8 +1,8 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 LABEL maintainer="yarbala@yarbala.com"
 
-ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so php"
 
 RUN apk -U upgrade && apk add --no-cache \
     curl \
@@ -55,13 +55,21 @@ RUN apk add --update mysql-client zlib-dev libzip-dev bash build-base automake a
   && docker-php-ext-install exif \
   && pecl install redis && docker-php-ext-enable redis \
   && docker-php-source delete && rm -rf /tmp/* \
-  && rm -rf /etc/apk/cache
+  && rm -rf /etc/apk/cache \
+  && apk add --no-cache \
+    imagemagick \
+    imagemagick-dev \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick \
+  && apk add icu-dev libxml2-dev ghostscript \
+  && docker-php-ext-configure intl && docker-php-ext-install intl \
+  && docker-php-ext-configure intl && docker-php-ext-install soap \
+  && docker-php-ext-install pcntl \
+  && apk add --no-cache linux-headers \
+  && docker-php-ext-install sockets \
+  && pecl install pcov && docker-php-ext-enable pcov
 
 ###########################################################################
-
-# not works /var/lib/nginx: No such file or directory
-RUN mkdir -p /var/lib/nginx
-RUN chown -Rf www-data:www-data /var/lib/nginx
 
 EXPOSE 80
 
