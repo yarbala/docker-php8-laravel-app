@@ -1,4 +1,5 @@
-FROM php:8.4-cli-alpine
+# Pinned to the same PHP + Alpine release as nginx.Dockerfile; bump both together.
+FROM php:8.4.26-cli-alpine3.24
 
 LABEL maintainer="yarbala@yarbala.com"
 

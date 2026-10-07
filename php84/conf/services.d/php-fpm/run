@@ -1,13 +1,7 @@
 #!/usr/bin/with-contenv sh
 
-# Enable opcache for production
-if [ "$APP_ENV" == "production" ]; then
-  mv /usr/local/etc/php/opcache_disabled.ini /usr/local/etc/php/opcache.ini
-  echo "Enabling PHP-FPM's opcache for production";
-else
-  echo "PHP-FPM's opcache is NOT enabled";
-fi
-
-su www-data
+# with-contenv is required: php-fpm expands ${FPM_*} / ${OPCACHE_*} in its config files from the
+# container environment. OPcache is always on (conf/opcache.ini), so there is no APP_ENV switch.
+# php-fpm must start as root; it drops the workers to www-data itself (pool `user`/`group`).
 
 exec /usr/local/sbin/php-fpm --nodaemonize
